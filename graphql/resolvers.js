@@ -42,12 +42,12 @@ const resolvers = {
       const user = await User.create({ account, email, password, name, avatar, introduction, banner, role })
       return user
     },
-    createTweet: async (_, { description, userId }) => {
-      const tweet = await Tweet.create({ description, userId })
+    createTweet: async (_, { description, UserId }) => {
+      const tweet = await Tweet.create({ description, UserId })
       return tweet
     },
-    createLike: async (_, { userId, tweetId }) => {
-      const like = await Like.create({ userId, tweetId })
+    createLike: async (_, { UserId, tweetId }) => {
+      const like = await Like.create({ UserId, TweetId })
       return like
     },
     createReply: async (_, { comment, userId, tweetId }) => {
