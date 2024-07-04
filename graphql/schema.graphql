@@ -1,0 +1,79 @@
+type User {
+  id: ID!
+  account: String!
+  email: String
+  password: String!
+  name: String!
+  avatar: String
+  introduction: String
+  banner: String
+  role: String
+  tweets: [Tweet]
+  likes: [Like]
+  replies: [Reply]
+  followers: [Followship]
+  following: [Followship]
+}
+
+type Tweet {
+  id: ID!
+  userId: Int!
+  description: String!
+  user: User!
+  replies: [Reply]
+  likes: [Like]
+}
+
+type Like {
+  id: ID!
+  userId: Int!
+  tweetId: Int!
+  user: User!
+  tweet: Tweet!
+}
+
+type Reply {
+  id: ID!
+  comment: String!
+  userId: Int!
+  tweetId: Int!
+  user: User!
+  tweet: Tweet!
+}
+
+type Followship {
+  id: ID!
+  followerId: Int!
+  followingId: Int!
+  follower: User!
+  following: User!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type Query {
+  users: [User]
+  user(id: ID!): User
+  tweets: [Tweet]
+  tweet(id: ID!): Tweet
+  likes: [Like]
+  like(id: ID!): Like
+  replies: [Reply]
+  reply(id: ID!): Reply
+  followships: [Followship]
+  followship(id: ID!): Followship
+}
+
+
+
+type Mutation {
+  signin(account: String!, password: String!): AuthPayload
+  createUser(account: String!, email: String!, password: String!, name: String!, avatar: String, introduction: String, banner: String, role: String): User
+  createTweet(description: String!, userId: Int!): Tweet
+  createLike(userId: Int!, tweetId: Int!): Like
+  createReply(content: String!, userId: Int!, tweetId: Int!): Reply
+  createFollowship(followerId: Int!, followingId: Int!): Followship
+}
