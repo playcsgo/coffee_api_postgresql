@@ -4,7 +4,13 @@
     "password": "0204",
     "database": "twitter",
     "host": "localhost",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   },
   "test": {
     "username": "postgres",

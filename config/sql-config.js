@@ -6,14 +6,26 @@ module.exports = {
     "password": process.env.RDS_PASSWORD,
     "database": process.env.RDS_NAME,
     "host": process.env.RDS_HOSTNAME,
-    "dialect": process.env.DIALECT
+    "dialect": process.env.DIALECT,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    },
   },
   "production": {
     "username": process.env.RDS_USERNAME,
     "password": process.env.RDS_PASSWORD,
     "database": process.env.RDS_NAME,
     "host": process.env.RDS_HOSTNAME,
-    "dialect": process.env.DIALECT
+    "dialect": process.env.DIALECT,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    },
   },
   "travis": {
     "username": "travis",
