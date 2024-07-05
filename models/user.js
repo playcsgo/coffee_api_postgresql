@@ -28,9 +28,15 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     name: DataTypes.STRING,
-    avatar: DataTypes.STRING,
+    avatar: {
+      type: DataTypes.STRING,
+      defaultValueP: 'https://i.imgur.com/V4RclNb.png'
+    },
     introduction: DataTypes.TEXT,
-    banner: DataTypes.STRING,
+    banner: {
+      type: DataTypes.STRING,
+      defaultValueP: 'https://i.imgur.com/ZFz8ZEI.png'
+    },
     role: {
       type: DataTypes.STRING,
       defaultValue: 'user'
