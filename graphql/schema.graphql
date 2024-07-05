@@ -13,15 +13,20 @@ type User {
   replies: [Reply]
   followers: [Followship]
   following: [Followship]
+  createdAt: String
+  updatedAt: String
+
 }
 
 type Tweet {
   id: ID!
-  userId: Int!
+  userId: Int
   description: String!
   user: User!
   replies: [Reply]
   likes: [Like]
+  createdAt: String
+  updatedAt: String
 }
 
 type Like {
@@ -30,6 +35,8 @@ type Like {
   tweetId: Int!
   user: User!
   tweet: Tweet!
+  createdAt: String
+  updatedAt: String
 }
 
 type Reply {
@@ -39,6 +46,8 @@ type Reply {
   tweetId: Int!
   user: User!
   tweet: Tweet!
+  createdAt: String
+  updatedAt: String
 }
 
 type Followship {
@@ -47,11 +56,15 @@ type Followship {
   followingId: Int!
   follower: User!
   following: User!
+  createdAt: String
+  updatedAt: String
 }
 
 type AuthPayload {
   token: String
   user: User
+  createdAt: String
+  updatedAt: String
 }
 
 type Query {
@@ -74,6 +87,6 @@ type Mutation {
   createUser(account: String!, email: String!, password: String!, name: String!, avatar: String, introduction: String, banner: String, role: String): User
   createTweet(description: String!, userId: Int!): Tweet
   createLike(userId: Int!, tweetId: Int!): Like
-  createReply(content: String!, userId: Int!, tweetId: Int!): Reply
+  createReply(comment: String!, userId: Int!, tweetId: Int!): Reply
   createFollowship(followerId: Int!, followingId: Int!): Followship
 }

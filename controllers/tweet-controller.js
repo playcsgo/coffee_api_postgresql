@@ -21,7 +21,7 @@ const tweetController = {
           ...t.toJSON(),
           repliesCount: t.Replies.length,
           likesCount: t.Likes.length,
-          isLike: req.user && req.user.Likes.some(like => like.TweetId === t.id)
+          isLike: req.user && req.user.Likes.some(like => like.tweetId === t.id)
         }))
         res.status(200).json(tweets)
       })
@@ -48,7 +48,7 @@ const tweetController = {
           ...tweet.toJSON(),
           repliesCount: tweet.Replies.length,
           likesCount: tweet.Likes.length,
-          isLike: req.user && req.user.Likes.some(like => like.TweetId === tweet.id)
+          isLike: req.user && req.user.Likes.some(like => like.tweetId === tweet.id)
         }
         res.json(tweet)
       })
@@ -65,7 +65,7 @@ const tweetController = {
       .then(user => {
         if (!user) throw new Error('此user不存在')
         return Tweet.create({
-          UserId: user.id,
+          userId: user.id,
           description
         })
       })
@@ -88,8 +88,8 @@ const tweetController = {
         if (!user) throw new Error('此user不存在')
         if (!tweet) throw new Error('此推文不存在')
         return Reply.create({
-          UserId: user.id,
-          TweetId: tweet.id,
+          userId: user.id,
+          tweetId: tweet.id,
           comment
         })
       })
@@ -104,7 +104,7 @@ const tweetController = {
       Tweet.findByPk(tweetId),
       Reply.findAll({
         where: {
-          TweetId: tweetId
+          tweetId: tweetId
         },
         include: {
           model: User,
@@ -123,15 +123,15 @@ const tweetController = {
   },
   // POST /tweets/:id/like  喜歡一則推文
   postTweetLike: (req, res, next) => {
-    const userId = helpers.getUser(req).id
-    const tweetId = req.params.id
+    const userId = +helpers.getUser(req).id
+    const tweetId = +req.params.id
 
     return Promise.all([
       Tweet.findByPk(tweetId),
       Like.findOne({
         where: {
-          UserId: userId,
-          TweetId: tweetId
+          userId: userId,
+          tweetId: tweetId
         }
       })
     ])
@@ -140,8 +140,8 @@ const tweetController = {
         if (like) throw new Error('已經喜歡過此篇推文')
 
         return Like.create({
-          UserId: userId,
-          TweetId: tweet.id
+          userId: userId,
+          tweetId: tweet.id
         })
       })
       .then(newLike => res.json(newLike))
@@ -154,8 +154,8 @@ const tweetController = {
 
     return Like.findOne({
       where: {
-        UserId: userId,
-        TweetId: tweetId
+        userId: userId,
+        tweetId: tweetId
       }
     })
       .then(like => {
@@ -163,8 +163,8 @@ const tweetController = {
 
         return Like.destroy({
           where: {
-            UserId: userId,
-            TweetId: tweetId
+            userId: userId,
+            tweetId: tweetId
           }
         })
       })

@@ -121,7 +121,7 @@ const userController = {
     Promise.all([
       User.findByPk(userId, { raw: true }),
       Tweet.findAll({
-        where: { UserId: userId },
+        where: { userId: userId },
         include: [
           // 遇到 model User, 都要小心, 最好使用attributes: ['指定要傳那些資料出去']
           // 或是 使用 attributes: { exclude: ['不要傳出去的'] } }, 但是你不知道會不會傳出去些什麼
@@ -139,7 +139,7 @@ const userController = {
           ...t.toJSON(),
           repliesCount: t.Replies.length,
           likesCount: t.Likes.length,
-          isLike: req.user && req.user.Likes.some(like => like.TweetId === t.id)
+          isLike: req.user && req.user.Likes.some(like => like.tweetId === t.id)
         }))
         res.status(200).json(tweets)
       })
@@ -150,7 +150,7 @@ const userController = {
     return Promise.all([
       User.findByPk(userId),
       Reply.findAll({
-        where: { UserId: userId },
+        where: { userId: userId },
         include: [
           { model: User, attributes: ['id', 'name', 'account', 'avatar'] },
           {
@@ -174,7 +174,7 @@ const userController = {
     return Promise.all([
       User.findByPk(userId),
       Like.findAll({
-        where: { UserId: userId },
+        where: { userId: userId },
         include: [
           { model: User, attributes: ['id', 'name', 'account', 'avatar'] },
           {

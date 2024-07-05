@@ -1,8 +1,9 @@
+require('dotenv').config()
 const { User, Tweet, Like, Reply, Followship } = require('../models')
 const { GraphQLError } = require('graphql')
 
 const jwt = require('jsonwebtoken')
-const bcryptjs = require('bcryptjs')
+const bcrypt = require('bcryptjs')
 
 const resolvers = {
   Query: {
@@ -21,7 +22,7 @@ const resolvers = {
     signin: async (_root, { account, password }, _context) => {
       try {
         const user = await User.findOne({ where: { account } })
-        const validate = await bcryptjs.compare(password, user.password)
+        const validate = await bcrypt.compare(password, user.password)
         if (!validate) {
           throw new GraphQLError('帳號或密碼輸入錯誤!')
         }
@@ -39,15 +40,22 @@ const resolvers = {
       }
     },
     createUser: async (_, { account, email, password, name, avatar, introduction, banner, role }) => {
-      const user = await User.create({ account, email, password, name, avatar, introduction, banner, role })
+      const hashedPassword = await bcrypt.hash(password, 10)
+      const userRole = role || 'user'
+      const user = await User.create({ account, email, password: hashedPassword, name, avatar, introduction, banner, role: userRole })
       return user
     },
-    createTweet: async (_, { description, UserId }) => {
-      const tweet = await Tweet.create({ description, UserId })
-      return tweet
+    createTweet: async (_, { description, userId }) => {
+      try {
+        const tweet = await Tweet.create({ description, userId })
+        return tweet
+      } catch(err) {
+        console.error(err)
+        throw new GraphQLError(err.message)
+      }
     },
-    createLike: async (_, { UserId, tweetId }) => {
-      const like = await Like.create({ UserId, TweetId })
+    createLike: async (_, { userId, tweetId }) => {
+      const like = await Like.create({ userId, tweetId })
       return like
     },
     createReply: async (_, { comment, userId, tweetId }) => {
